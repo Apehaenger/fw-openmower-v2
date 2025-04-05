@@ -10,6 +10,22 @@ namespace General {
 void InitPlatform() {
   // Not used, we could start the GUI driver task here for example
 }
+bool IsHardwareSupported() {
+  /* TODO: Check EEPROM
+  // First batch of universal boards have a non-working EEPROM
+  // so we assume that the firmware is compatible, if the xcore is the first batch and no carrier was found.
+  if (carrier_board_info.board_info_version == 0 &&
+      strncmp("N/A", carrier_board_info.board_id, sizeof(carrier_board_info.board_id)) == 0 &&
+      strncmp("xcore", board_info.board_id, sizeof(board_info.board_id)) == 0 && board_info.version_major == 1 &&
+      board_info.version_minor == 1 && board_info.version_patch == 7) {
+    return true;
+  }
+
+  // Else, we accept universal boards
+  return strncmp("hw-openmower-universal", carrier_board_info.board_id, sizeof(carrier_board_info.board_id)) == 0;
+*/
+  return true;
+}
 }  // namespace General
 
 namespace GPS {
@@ -47,12 +63,10 @@ float GetMinVoltage() {
 
 namespace Emergency {
 std::pair<const Sensor*, size_t> getSensors() {
-  static const Sensor sensors[] = {
-      Sensor{"Front-left-wheel", PAL_LINE(GPIOG, 4), false, SensorType::WHEEL},
-      Sensor{"Front-right-wheel", PAL_LINE(GPIOG, 5), false, SensorType::WHEEL},
-      Sensor{"Top-stop-button", PAL_LINE(GPIOG, 8), false, SensorType::BUTTON},
-      Sensor{"Rear-stop-handle", PAL_LINE(GPIOD, 10), false, SensorType::BUTTON}
-  };
+  static const Sensor sensors[] = {Sensor{"Front-left-wheel", PAL_LINE(GPIOG, 4), false, SensorType::WHEEL},
+                                   Sensor{"Front-right-wheel", PAL_LINE(GPIOG, 5), false, SensorType::WHEEL},
+                                   Sensor{"Top-stop-button", PAL_LINE(GPIOG, 8), false, SensorType::BUTTON},
+                                   Sensor{"Rear-stop-handle", PAL_LINE(GPIOD, 10), false, SensorType::BUTTON}};
   return {sensors, sizeof(sensors) / sizeof(sensors[0])};
 }
 
