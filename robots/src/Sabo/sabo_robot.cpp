@@ -47,10 +47,12 @@ float GetMinVoltage() {
 
 namespace Emergency {
 std::pair<const Sensor*, size_t> getSensors() {
-  static const Sensor sensors[] = {Sensor{"Front-left-wheel", PAL_LINE(GPIOG, 4), false, SensorType::WHEEL},
-                                   Sensor{"Front-right-wheel", PAL_LINE(GPIOG, 5), false, SensorType::WHEEL},
-                                   Sensor{"Top-stop-button", PAL_LINE(GPIOG, 8), false, SensorType::BUTTON},
-                                   Sensor{"Rear-stop-handle", PAL_LINE(GPIOD, 10), false, SensorType::BUTTON}};
+  static const Sensor sensors[] = {
+      Sensor{"Front-left-wheel", PAL_LINE(GPIOG, 4), false, SensorType::WHEEL},
+      Sensor{"Front-right-wheel", PAL_LINE(GPIOG, 5), false, SensorType::WHEEL},
+      Sensor{"Top-stop-button", PAL_LINE(GPIOG, 8), false, SensorType::BUTTON},
+      Sensor{"Rear-stop-handle", PAL_LINE(GPIOD, 10), false, SensorType::BUTTON}
+  };
   return {sensors, sizeof(sensors) / sizeof(sensors[0])};
 }
 
