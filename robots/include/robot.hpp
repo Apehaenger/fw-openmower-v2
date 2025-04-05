@@ -12,6 +12,7 @@ namespace Robot {
 
 namespace General {
 [[maybe_unused]] void InitPlatform();
+bool IsHardwareSupported();
 }
 
 namespace GPS {
