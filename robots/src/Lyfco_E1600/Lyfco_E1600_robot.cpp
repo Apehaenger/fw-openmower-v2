@@ -4,10 +4,10 @@
 
 #include <ulog.h>
 
+#include <drivers/charger/bq_2576/bq_2576.hpp>
 #include <globals.hpp>
 
 #include "robot.hpp"
-#include <drivers/charger/bq_2576/bq_2576.hpp>
 
 namespace Robot {
 
@@ -55,32 +55,17 @@ Charger* GetCharger() {
 }
 
 float GetMaxVoltage() {
-  return 5.0f * 4.2f;
+  return 7.0f * 4.2f;
 }
 
 float GetChargeCurrent() {
-  return 1.0;
+  return 2.5;
 }
 
 float GetMinVoltage() {
-  // 3.3V min, 5s pack
-  return 5.0f * 3.3;
+  // 3.3V min, 7s pack
+  return 7.0f * 3.3;
 }
 
 }  // namespace Power
-
-namespace Emergency {
-std::pair<const Sensor*, size_t> getSensors() {
-  return {nullptr, 0};  // No sensors defined yet
-}
-
-u_int getLiftPeriod() {
-  return 100;
-}
-
-u_int getTiltPeriod() {
-  return 2500;
-}
-}  // namespace Emergency
-
 }  // namespace Robot

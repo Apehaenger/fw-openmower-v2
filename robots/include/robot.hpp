@@ -7,6 +7,12 @@
 
 #include <etl/string_view.h>
 #include <hal.h>
+#include <drivers/charger/charger.hpp>
+
+#ifdef ROBOT_PLATFORM_HEADER
+#include ROBOT_PLATFORM_HEADER
+#endif
+
 
 namespace Robot {
 
@@ -22,6 +28,7 @@ namespace GPS {
 namespace Power {
 
 [[maybe_unused]] I2CDriver* GetPowerI2CD();
+[[maybe_unused]] Charger* GetCharger();
 
 /**
  * Return the maximum voltage for this robot.
