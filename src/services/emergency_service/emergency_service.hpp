@@ -9,8 +9,7 @@
 
 #include <EmergencyServiceBase.hpp>
 
-#include "ch.h"
-#include "hal.h"
+using namespace xbot::service;
 
 class EmergencyService : public EmergencyServiceBase {
  private:
@@ -19,7 +18,7 @@ class EmergencyService : public EmergencyServiceBase {
   THD_WORKING_AREA(wa, 1024) {};
 
  public:
-  explicit EmergencyService(uint16_t service_id) : EmergencyServiceBase(service_id, 100'000, wa, sizeof(wa)) {
+  explicit EmergencyService(uint16_t service_id) : EmergencyServiceBase(service_id, wa, sizeof(wa)) {
   }
 
  protected:
@@ -34,7 +33,9 @@ class EmergencyService : public EmergencyServiceBase {
   etl::string<MAX_EMERGENCY_REASON_LEN> getTriggeredSensors();
 
  private:
-  void tick() override;
+  void tick();
+  ManagedSchedule tick_schedule_{scheduler_, IsRunning(), 100'000,
+                                 XBOT_FUNCTION_FOR_METHOD(EmergencyService, &EmergencyService::tick, this)};
 
   systime_t last_clear_emergency_message_ = 0;
   systime_t button_emergency_started_ = 0;
