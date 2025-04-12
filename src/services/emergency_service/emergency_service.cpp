@@ -35,7 +35,7 @@ void EmergencyService::OnStop() {
 void EmergencyService::tick() {
   // Get the current emergency state
   MowerStatus mower_status = GetMowerStatus();
-  bool new_emergency = false;
+  //bool new_emergency = false;
 
   // Check timeout, but only overwrite if no emergency is currently active
   // reasoning is that we want to keep the original reason and not overwrite
