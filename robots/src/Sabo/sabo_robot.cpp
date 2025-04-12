@@ -2,9 +2,14 @@
 // Created by Apehaenger on 03/24/2025
 //
 
+#include <drivers/charger/bq_2576/bq_2576.hpp>
+#include <globals.hpp>
+
 #include "robot.hpp"
 
 namespace Robot {
+
+static BQ2576 charger{};
 
 namespace General {
 void InitPlatform() {
@@ -41,6 +46,10 @@ namespace Power {
 
 I2CDriver* GetPowerI2CD() {
   return &I2CD1;
+}
+
+Charger* GetCharger() {
+  return &charger;
 }
 
 float GetMaxVoltage() {
