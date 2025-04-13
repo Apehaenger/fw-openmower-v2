@@ -8,6 +8,8 @@
 #include <etl/array.h>
 #include <etl/string.h>
 
+#include <ImuServiceBase.hpp>
+
 using namespace xbot::service;
 
 class ImuService : public ImuServiceBase {

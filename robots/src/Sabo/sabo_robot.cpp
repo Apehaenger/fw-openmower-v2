@@ -3,6 +3,7 @@
 //
 
 #include <drivers/charger/bq_2576/bq_2576.hpp>
+#include <drivers/emergency/gpio_emergency_driver.hpp>
 #include <globals.hpp>
 
 #include "robot.hpp"
@@ -10,25 +11,38 @@
 namespace Robot {
 
 static BQ2576 charger{};
+static GPIOEmergencyDriver emergencyDriver{};
 
 namespace General {
 void InitPlatform() {
-  // Not used, we could start the GUI driver task here for example
+  // Front left wheel lift (Hall)
+  emergencyDriver.AddInput({.gpio_line = LINE_EMERGENCY_1,
+                            .invert = false,
+                            .active_since = 0,
+                            .timeout_duration = TIME_MS2I(1000),
+                            .active = false});
+  // Front right wheel lift (Hall)
+  emergencyDriver.AddInput({.gpio_line = LINE_EMERGENCY_2,
+                            .invert = false,
+                            .active_since = 0,
+                            .timeout_duration = TIME_MS2I(1000),
+                            .active = false});
+  // Top stop button (Hall)
+  emergencyDriver.AddInput({.gpio_line = LINE_EMERGENCY_3,
+                            .invert = false,
+                            .active_since = 0,
+                            .timeout_duration = TIME_MS2I(10),
+                            .active = false});
+  // Back-handle stop (Capacitive)
+  emergencyDriver.AddInput({.gpio_line = LINE_EMERGENCY_4,
+                            .invert = false,
+                            .active_since = 0,
+                            .timeout_duration = TIME_MS2I(10),
+                            .active = false});
+  emergencyDriver.Start();
 }
 bool IsHardwareSupported() {
-  /* TODO: Check EEPROM
-  // First batch of universal boards have a non-working EEPROM
-  // so we assume that the firmware is compatible, if the xcore is the first batch and no carrier was found.
-  if (carrier_board_info.board_info_version == 0 &&
-      strncmp("N/A", carrier_board_info.board_id, sizeof(carrier_board_info.board_id)) == 0 &&
-      strncmp("xcore", board_info.board_id, sizeof(board_info.board_id)) == 0 && board_info.version_major == 1 &&
-      board_info.version_minor == 1 && board_info.version_patch == 7) {
-    return true;
-  }
-
-  // Else, we accept universal boards
-  return strncmp("hw-openmower-universal", carrier_board_info.board_id, sizeof(carrier_board_info.board_id)) == 0;
-*/
+  // FIXME: Fix EEPROM reading and check EEPROM
   return true;
 }
 }  // namespace General
@@ -69,23 +83,5 @@ float GetMinVoltage() {
 }
 
 }  // namespace Power
-
-namespace Emergency {
-std::pair<const Sensor*, size_t> getSensors() {
-  static const Sensor sensors[] = {Sensor{"Front-left-wheel", PAL_LINE(GPIOG, 4), false, SensorType::WHEEL},
-                                   Sensor{"Front-right-wheel", PAL_LINE(GPIOG, 5), false, SensorType::WHEEL},
-                                   Sensor{"Top-stop-button", PAL_LINE(GPIOG, 8), false, SensorType::BUTTON},
-                                   Sensor{"Rear-stop-handle", PAL_LINE(GPIOD, 10), false, SensorType::BUTTON}};
-  return {sensors, sizeof(sensors) / sizeof(sensors[0])};
-}
-
-u_int getLiftPeriod() {
-  return 100;
-}
-
-u_int getTiltPeriod() {
-  return 2500;
-}
-}  // namespace Emergency
 
 }  // namespace Robot
